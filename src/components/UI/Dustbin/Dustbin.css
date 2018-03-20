@@ -1,0 +1,39 @@
+.dropTarget {
+  color: white;
+  text-align: center;
+  line-height: normal;
+  height: 100%;
+}
+
+.arrowDown {
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-top: 40px solid #fff;
+  margin: 0 auto;
+  display: block;
+}
+
+.icon {
+  color: gray;
+  font-size: 2.5rem;
+}
+
+.card {
+  margin: 22px;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  /* box-sizing: border-box; */
+  box-shadow: 0 2px 3px #ccc;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  cursor: move;
+  background-color: white;
+}
+
+.name {
+    font-size: 18px;
+    font-family: sans-serif;
+}
