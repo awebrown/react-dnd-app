@@ -22,7 +22,7 @@ export default class AppDragDropDemo extends Component {
     onDrop = (ev, cat) => {
        let id = ev.dataTransfer.getData("id");
        let cards = this.state.cards.filter((card) => {
-           if (card.name == id) {
+           if (card.name === id) {
                card.category = cat;
            }
            return card;
