@@ -1,4 +1,4 @@
-.wrapper {
+/* .wrapper {
     display: table;
     height: 100%;
     width: 100%;
@@ -14,4 +14,69 @@
     display: table-row;
     height: 100%;
     /* background: teal; */
+/* } */
+
+.App { */
+  text-align: center;
+  width: 95%;
+  margin: 15px auto;
+}
+
+.containerDrag {
+  text-align: center;
+}
+
+.wip {
+  /* position: absolute; */
+  width: 100%;
+  height: 30vh;
+  left: 0;
+  top: 10;
+  background-color: #fff;
+  border-right: 1px dotted;
+}
+
+.header {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  background-color: #E0E0E0;
+  width:100%;
+}
+
+.task-header {
+  display: inline-block;
+  background-color: skyblue;
+  width:100%;
+}
+
+.droppable {
+  /* position: absolute; */
+  width: 100%;
+  height: 70vh;
+  right: 0;
+  top: 10;
+  background-color: darkcyan;
+  border-left: 1px dotted;
+}
+
+.draggable {
+  margin: 22px;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  /* box-sizing: border-box; */
+  box-shadow: 0 2px 3px #ccc;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  cursor: move;
+  background-color: white;
+  color: black;
+}
+
+.icon {
+  color: gray;
+  font-size: 2.5rem;
+  padding: 15px;
+  display: block;
 }
