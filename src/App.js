@@ -12,6 +12,7 @@ import * as actions from './store/actions/index';
 class App extends Component {
 
   componentDidMount () {
+    console.log(this.props);
     this.props.onTryAutoSignup();
   }
 
