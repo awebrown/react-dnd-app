@@ -69,7 +69,7 @@ export const auth = (email, password, isSignUp) => {
 }
 
 export const setAuthRedirectPath = (path) => {
-  console.log(path);
+  // console.log(path);
     return {
         type: actionTypes.SET_AUTH_REDIRECT_PATH,
         path: path
@@ -77,7 +77,7 @@ export const setAuthRedirectPath = (path) => {
 };
 
 export const authCheckState = () => {
-  console.log('authCheckState');
+  // console.log('authCheckState');
     return dispatch => {
         const token = localStorage.getItem('token');
         if (!token) {
