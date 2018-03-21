@@ -31,7 +31,7 @@ class Layout extends Component {
                     isAuth={this.props.isAuthenticated}
                     open={this.state.showSideDrawer}
                     closed={this.sideDrawerClosedHandler} />
-                <main className={classes.Content}>
+                  <main className={classes.Content}>
                     {this.props.children}
                 </main>
             </Aux>
@@ -41,7 +41,8 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.token !== null
+        isAuthenticated: state.token !== null,
+        token: state.token
     };
 };
 

@@ -1,51 +1,56 @@
 import React, { Component } from 'react';
 import axios from '../axios-dashboard';
 import classes from './Main.css';
+import { connect } from 'react-redux';
+import * as actionTypes from '../store/actions/actionTypes';
 
+import Snackbar from 'material-ui/Snackbar';
 import Spinner from '../components/UI/Spinner/Spinner';
 
-export default class AppDragDropDemo extends Component {
-    state = {
-        cards: [
-          {name: "Machine", category: "wip", iconClass: "fa fa-cogs"},
-          {name: "Database", category: "wip", iconClass: "fa fa-database"},
-          {name: "Server", category: "wip", iconClass: "fa fa-server"},
-          {name: "Ledger", category: "wip", iconClass: "fa fa-industry"},
-          {name: "Factory", category: "wip", iconClass: "fa fa-building"},
-          {name: "Hertz", category: "wip", iconClass: "fa fa-bolt"}
-        ],
-        loading: false
-      }
+class AppDragDropDemo extends Component {
+  state = {
+    cards: this.props.cards,
+    loading: false,
+    showSnackBar: false,
+    sortId: 1
+  };
 
+
+  //Load data from DB
     componentWillMount() {
+      const queryParams = '?auth=' + this.props.token + '&orderBy= "userId"&equalTo="' + this.props.userId + '"';
       let fetchedData = [];
 
       this.setState({
         loading: true
       });
 
-      axios.get('/dashboard.json')
+      axios.get('/dashboard.json' + queryParams)
         .then(res => {
-          console.log('RES DATA: ', res.data);
-          if (!!res.data) {
+          if (!!res.data && Object.keys(res.data).length !== 0) {
+            const lastKey = Object.keys(res.data).sort().splice(-1)[0];
             for (let key in res.data) {
-              fetchedData = res.data[key];
+              if (key === lastKey) {
+                fetchedData = res.data[key];
+              }
             }
 
             this.setState({
-              cards: fetchedData,
+              cards: fetchedData.cards,
               loading: false
             });
+
           } else {
             this.setState({
+              cards: this.state.cards,
               loading: false
-            })
+            });
           }
-
         })
-        .catch(err => console.log('ERROR', err));
+        .catch(err => console.log('ERROR: ', err));
     }
 
+    //Drag events
     onDragStart = (ev, id) => {
         ev.dataTransfer.setData("id", id);
     }
@@ -56,7 +61,6 @@ export default class AppDragDropDemo extends Component {
 
     onDrop = (ev, cat) => {
        let id = ev.dataTransfer.getData("id");
-       console.log(id);
        let cards = this.state.cards.filter((card) => {
            if (card.name === id) {
                card.category = cat;
@@ -64,14 +68,20 @@ export default class AppDragDropDemo extends Component {
            return card;
        });
 
-
        this.setState({
            cards: [...this.state.cards]
        });
 
-       console.log(this.state.cards);
-       axios.post('/dashboard.json', this.state.cards)
+       const postData = {
+         cards: this.state.cards,
+         userId: this.props.userId,
+         sortId: this.state.sortId++
+       };
+
+       axios.post('/dashboard.json', postData)
         .then((res) => {
+
+          this.setState({showSnackBar: true})
         }).catch((err) => {
           console.log(err);
         });
@@ -83,47 +93,61 @@ export default class AppDragDropDemo extends Component {
             complete: []
         }
 
-        console.log('STATE ON RENDER:', this.state);
-
         if (this.state.loading) {
           return (
             <Spinner />
           )
         }
 
-        if (!this.state.loading) {
-
-          this.state.cards.forEach ((t) => {
-              cards[t.category].push(
-                  <div key={t.name}
-                       onDragStart = {(e) => this.onDragStart(e, t.name)}
-                       draggable
-                       className={classes.draggable}>
-                      {t.name}
-                      <i className={t.iconClass + ' ' + classes.icon}></i>
-                  </div>
-              );
-          });
-        }
+        this.state.cards.forEach ((t) => {
+            cards[t.category].push(
+                <div key={t.name}
+                     onDragStart = {(e) => this.onDragStart(e, t.name)}
+                     draggable
+                     className={classes.draggable}>
+                  {t.name}
+                  <i className={t.iconClass + ' ' + classes.icon}></i>
+                </div>
+            );
+        });
 
         return (
-
             <div className={classes.containerDrag}>
-
                 <div className={classes.wip}
-                    onDragOver={(e)=>this.onDragOver(e)}
-                    onDrop={(e)=>{this.onDrop(e, "wip")}}>
-                    <span className="card-header"></span>
-                    {cards.wip}
+                     onDragOver={(e)=>this.onDragOver(e)}
+                     onDrop={(e)=>{this.onDrop(e, "wip")}}>
+                  <span className="card-header"></span>
+                  {cards.wip}
                 </div>
                 <div className={classes.droppable}
-                    onDragOver={(e)=>this.onDragOver(e)}
-                    onDrop={(e)=>this.onDrop(e, "complete")}>
-                     <span className="card-header"></span>
-                     {cards.complete}
+                     onDragOver={(e)=>this.onDragOver(e)}
+                     onDrop={(e)=>this.onDrop(e, 'complete')}>
+                  <span className={classes.arrowDown}></span>
+                  <span className="card-header"></span>
+                  {cards.complete}
                 </div>
-
+                <Snackbar
+                   open={this.state.showSnackBar}
+                   message='Your dashboard has been updated!'
+                   autoHideDuration={1500}
+                 />
             </div>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    cards: state.cards,
+    token: state.token,
+    userId: state.userId
+   };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return  {
+    // onOptionChange: () => dispatch({ type: actionTypes.OPTION_CHANGE })
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppDragDropDemo);

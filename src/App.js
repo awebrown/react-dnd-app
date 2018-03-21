@@ -9,10 +9,12 @@ import Logout from './containers/Auth/Logout/Logout';
 import Main from './containers/Main';
 import * as actions from './store/actions/index';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+
 class App extends Component {
 
   componentDidMount () {
-    console.log(this.props);
     this.props.onTryAutoSignup();
   }
 
@@ -24,7 +26,7 @@ class App extends Component {
       </Switch>
     );
 
-    if ( this.props.isAuthenticated ) {
+    if (this.props.isAuthenticated) {
       routes = (
         <Switch>
           <Route path="/dashboard" component={Main} />
@@ -36,7 +38,9 @@ class App extends Component {
 
     return (
       <Layout>
-        {routes}
+        <MuiThemeProvider>
+          {routes}
+        </MuiThemeProvider>
       </Layout>
     );
   }
@@ -54,4 +58,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default withRouter( connect( mapStateToProps, mapDispatchToProps )( App ) );
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
