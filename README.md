@@ -1,6 +1,10 @@
 ## To Run App
 
-Clone repo, cd into directory, run npm i && npm start
+Clone repo, cd into directory, run yarn add && yarn start
+
+OR
+
+Visit the [live site](https://react-dnd.herokuapp.com/).
 
 
 
