@@ -8,6 +8,7 @@ import * as actionTypes from '../store/actions/actionTypes';
 import { ToastContainer, toast } from 'react-toastify';
 
 import Spinner from '../components/UI/Spinner/Spinner';
+import { css } from 'glamor';
 
 class AppDragDropDemo extends Component {
   state = {
@@ -15,8 +16,14 @@ class AppDragDropDemo extends Component {
     loading: false,
     showSnackBar: false,
     sortId: 1,
-    notify: () => toast.success("Dashboard updated!", {
-      position: toast.POSITION.TOP_LEFT
+    notify: () => toast("👍 Dashboard updated! 👍", {
+      position: toast.POSITION.TOP_LEFT,
+      autoClose: 2500,
+      className: css({
+        background: 'rgba(0,0,0,.8)',
+        color: 'whitesmoke',
+        textAlign: 'center'
+      })
     })
   };
 
