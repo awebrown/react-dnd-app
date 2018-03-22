@@ -4,7 +4,9 @@ import classes from './Main.css';
 import { connect } from 'react-redux';
 import * as actionTypes from '../store/actions/actionTypes';
 
-import Snackbar from 'material-ui/Snackbar';
+// import Snackbar from 'material-ui/Snackbar';
+import { ToastContainer, toast } from 'react-toastify';
+
 import Spinner from '../components/UI/Spinner/Spinner';
 
 class AppDragDropDemo extends Component {
@@ -12,9 +14,11 @@ class AppDragDropDemo extends Component {
     cards: this.props.cards,
     loading: false,
     showSnackBar: false,
-    sortId: 1
+    sortId: 1,
+    notify: () => toast.success("Dashboard updated!", {
+      position: toast.POSITION.TOP_LEFT
+    })
   };
-
 
   //Load data from DB
     componentWillMount() {
@@ -80,8 +84,8 @@ class AppDragDropDemo extends Component {
 
        axios.post('/dashboard.json', postData)
         .then((res) => {
-
-          this.setState({showSnackBar: true})
+          this.state.notify();
+          // this.setState({showSnackBar: true})
         }).catch((err) => {
           console.log(err);
         });
@@ -112,26 +116,25 @@ class AppDragDropDemo extends Component {
         });
 
         return (
-            <div className={classes.containerDrag}>
-                <div className={classes.wip}
-                     onDragOver={(e)=>this.onDragOver(e)}
-                     onDrop={(e)=>{this.onDrop(e, "wip")}}>
-                  <span className="card-header"></span>
-                  {cards.wip}
-                </div>
-                <div className={classes.droppable}
-                     onDragOver={(e)=>this.onDragOver(e)}
-                     onDrop={(e)=>this.onDrop(e, 'complete')}>
-                  <span className={classes.arrowDown}></span>
-                  <span className="card-header"></span>
-                  {cards.complete}
-                </div>
-                <Snackbar
-                   open={this.state.showSnackBar}
-                   message='Your dashboard has been updated!'
-                   autoHideDuration={1500}
-                 />
-            </div>
+          <div>
+            <ToastContainer style={{left: 0}} />
+              <div className={classes.containerDrag}>
+                  <div className={classes.wip}
+                       onDragOver={(e)=>this.onDragOver(e)}
+                       onDrop={(e)=>{this.onDrop(e, "wip")}}>
+                    <span className="card-header"></span>
+                    {cards.wip}
+                  </div>
+                  <div className={classes.droppable}
+                       onDragOver={(e)=>this.onDragOver(e)}
+                       onDrop={(e)=>this.onDrop(e, 'complete')}>
+                    <span className={classes.arrowDown}></span>
+                    <span className="card-header"></span>
+                    {cards.complete}
+                  </div>
+              </div>
+          </div>
+
         );
     }
 }
